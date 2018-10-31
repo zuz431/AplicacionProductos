@@ -23,14 +23,26 @@ class UserInt {
         `;
         PRODUCTLIST.appendChild(ELEMENT);
     }
-    resetForm(){
+    resetForm() {
         document.getElementById('product-form').reset();
     }
-    deleteProduct() {
-
+    deleteProduct(ELEMENT) {
+        if(ELEMENT.name==='delete') {
+            ELEMENT.parentElement.parentElement.parentElement.remove();
+            this.showMessage('Product Deleted Succesfully', 'info');
+        }
     }
-    showMessage() {
-
+    showMessage(message, cssClass) {
+        const DIV = document.createElement('div');
+        DIV.className = `alert alert-${cssClass} mt-4`;
+        DIV.appendChild(document.createTextNode(message));
+        //Showing in DOM
+        const CONTAINER = document.querySelector('.container');
+        const APP = document.querySelector('#App');
+        CONTAINER.insertBefore(DIV,APP);
+        setTimeout(function(){
+            document.querySelector('.alert').remove();
+        }, 3000);
     }
 }
 
@@ -46,12 +58,21 @@ document.getElementById('product-form').addEventListener('submit',function(e){
     const PRODUCT = new Product(NAME,PRICE,YEAR);
 
     const UI =  new UserInt();
+    if(NAME === '' || PRICE === '' || YEAR === '') {
+        return UI.showMessage('Complete Fields Please', 'danger')
+    }
     UI.addProduct(PRODUCT);
     UI.resetForm();
+    UI.showMessage('Product Added Succesfully','success');
+    
+    
 
     e.preventDefault();
 });
 
 
-document.getElementById('');
+document.getElementById('product-list').addEventListener('click', function(e){
+    const UI = new UserInt();
+    UI.deleteProduct(e.target);
+});
 
